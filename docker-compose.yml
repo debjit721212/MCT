@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:6.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: always
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mct_dashboard
+    ports:
+      - "8088:8088"  # FastAPI
+      - "8501:8501"  # Streamlit
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QDRANT_HOST=http://qdrant:6333
+    depends_on:
+      - redis
+      - qdrant
+    restart: always
+
+volumes:
+  qdrant_data:

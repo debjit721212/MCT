@@ -1,0 +1,28 @@
+zones:
+  - name: zone1
+    cameras:
+      - id: camA
+        uri: rtsp://10.90.6.161:8554/cam19220
+      - id: camB
+        uri: rtsp://10.90.6.141:32554/recording1
+    transitions:
+      - [camA, camB, 0.9]   # Person usually goes from A → B
+      - [camB, camA, 0.1]   # Less common reverse path
+
+  - name: zone2
+    cameras:
+      - id: camC
+        uri: rtsp://192.168.1.201:554/zone2/streamC
+      - id: camD
+        uri: rtsp://192.168.1.202:554/zone2/streamD
+    transitions:
+      - [camC, camD, 0.8]
+      - [camD, camC, 0.2]
+
+  - name: zone3
+    cameras:
+      - id: camE
+        uri: rtsp://192.168.1.301:554/zone3/streamE
+    transitions:
+      - [camB, camE, 0.7]   # Cross-zone transition from zone1 → zone3
+      - [camD, camE, 0.3]   # Cross-zone transition from zone2 → zone3
